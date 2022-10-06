@@ -35,11 +35,16 @@ set<string> Movie::keywords() const {
 }
 
 string Movie::displayString() const {
-	return "qty: " + to_string(qty_) + ", name: " + name_ + ", rating: " + rating_ + ", genre: " + genre_ + ", price: " + to_string(price_);
+	return name_ + "\n" + "Genre: " + genre_ + " Rating: " + rating_ + "\n" + to_string(price_) + " " + to_string(qty_) + " left.";
 }
 
 void Movie::dump(ostream& os) const {
-	os << qty_ << name_ << rating_ << genre_ << price_;
+	os << category() << std::endl;
+	os << getName() << std::endl;
+	os << to_string(getPrice()) << std::endl;
+	os << to_string(getQty()) << std::endl;
+	os << getGenre() << std::endl;
+	os << getRating() << std:: endl;
 }
 
 string Movie::getGenre() const {
@@ -50,6 +55,6 @@ string Movie::getRating() const {
 	return rating_;
 }
 
-const string Movie::category() {
+string Movie::category() const {
 	return "movie";
 }

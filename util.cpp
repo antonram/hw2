@@ -36,7 +36,7 @@ std::set<std::string> parseStringToWords(string rawWords)
         if(delim.find(rawWords[end]) != delim.end()) {
 					// if above acceptable size, insert what we have so far
             if(end - start >= 2) {
-                wordList.insert(rawWords.substr(start, end - start));
+                wordList.insert(convToLower(rawWords.substr(start, end - start)));
             }
             //in case there's more than one punctuation, must keep moving end index forward until we hit another character
             while(delim.find(rawWords[end]) != delim.end()) {
@@ -51,7 +51,7 @@ std::set<std::string> parseStringToWords(string rawWords)
     }
     //since word cannot end in whitespace, we add last phrase to wordList in case we missed a word
     if(end - start >= 2) {
-        wordList.insert(rawWords.substr(start));
+        wordList.insert(convToLower(rawWords.substr(start)));
     }
     //returns newly formed set of words
     return wordList;

@@ -38,11 +38,16 @@ set<string> Book::keywords() const {
 }
 
 string Book::displayString() const {
-	return "qty: " + to_string(qty_) + ", name: " + name_ + ", isbn: " + isbn_ + ", author: " + author_ + ", price: " + to_string(price_);
+	return name_ + "\n" + "Author: " + author_ + " ISBN: " + isbn_ + "\n" + to_string(price_) + " " + to_string(qty_) + " left.";
 }
 
 void Book::dump(ostream& os) const {
-	os << qty_ << name_ << isbn_ << author_ << price_;
+	os << category() << std::endl;
+	os << getName() << std::endl;
+	os << to_string(getPrice()) << std::endl;
+	os << to_string(getQty()) << std::endl;
+	os << getIsbn() << std::endl;
+	os << getAuthor() << std:: endl;
 }
 
 string Book::getIsbn() const {
@@ -53,7 +58,7 @@ string Book::getAuthor() const {
 	return author_;
 }
 
-const string Book::category() {
+string Book::category() const {
 	return "book";
 }
 

@@ -62,16 +62,8 @@ std::set<T> setUnion(std::set<T>& s1, std::set<T>& s2)
 
 	// we add items of s1 into result
 	for(itr = s1.begin(); itr != s1.end(); ++itr) {
-		// if item not already in result
-		if(Result.find(*itr) == Result.end()) {
-			Result.insert(*itr);
-		}
-	}
-
-	// now items of s2 into result
-	for(itr = s2.begin(); itr != s2.end(); ++itr) {
-		// if item not already in result
-		if(Result.find(*itr) == Result.end()) {
+		// if item is also in s2, we add to result
+		if(s2.find(*itr) != s2.end()) {
 			Result.insert(*itr);
 		}
 	}

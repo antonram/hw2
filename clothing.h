@@ -20,7 +20,7 @@ class Clothing : public Product {
 
 		std::string getBrand() const;
 
-		const std::string category();
+		std::string category() const;
 
 	protected:
 		std::string size_;

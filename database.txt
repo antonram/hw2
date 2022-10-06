@@ -23,8 +23,15 @@ Hidden Figures DVD
 1
 Drama
 PG
+movie
+I'll be there for you
+21.21
+2
+Comedy
+PG
 </products>
 <users>
+anton 100000.0 1
 aturing 100.00 0
 johnvn 50.00 1
 adal 120.00 1

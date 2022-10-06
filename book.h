@@ -20,7 +20,7 @@ class Book : public Product {
 
 		std::string getAuthor() const;
 
-		const std::string category();
+		std::string category() const;
 
 	protected:
 		std::string isbn_;

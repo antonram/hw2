@@ -20,7 +20,7 @@ class Movie : public Product {
 
 		std::string getRating() const;
 
-		const std::string category();
+		std::string category() const;
 
 	protected:
 		std::string genre_;

@@ -36,11 +36,16 @@ set<string> Clothing::keywords() const {
 }
 
 string Clothing::displayString() const {
-	return "qty: " + to_string(qty_) + ", name: " + name_ + ", size: " + size_ + ", brand: " + brand_ + ", price: " + to_string(price_);
+	return name_ + "\n" + "Size: " + size_ + " Brand: " + brand_ + "\n" + to_string(price_) + " " + to_string(qty_) + " left.";
 }
 
 void Clothing::dump(ostream& os) const {
-	os << qty_ << name_ << size_ << brand_ << price_;
+	os << category() << std::endl;
+	os << getName() << std::endl;
+	os << to_string(getPrice()) << std::endl;
+	os << to_string(getQty()) << std::endl;
+	os << getSize() << std::endl;
+	os << getBrand() << std:: endl;
 }
 
 string Clothing::getSize() const {
@@ -51,6 +56,6 @@ string Clothing::getBrand() const {
 	return brand_;
 }
 
-const string Clothing::category() {
+string Clothing::category() const {
 	return "clothing";
 }

@@ -3,12 +3,14 @@
 #include <set>
 #include <sstream>
 #include <vector>
+#include <map>
 #include <iomanip>
 #include <algorithm>
 #include "product.h"
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "mydatastore.h"
 
 using namespace std;
 struct ProdNameSorter {
@@ -29,7 +31,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
 
@@ -70,15 +72,16 @@ int main(int argc, char* argv[])
         stringstream ss(line);
         string cmd;
         if((ss >> cmd)) {
+            
             if( cmd == "AND") {
-                string term;
-                vector<string> terms;
-                while(ss >> term) {
-                    term = convToLower(term);
-                    terms.push_back(term);
-                }
-                hits = ds.search(terms, 0);
-                displayProducts(hits);
+              string term;
+              vector<string> terms;
+              while(ss >> term) {
+                  term = convToLower(term);
+                  terms.push_back(term);
+              }
+              hits = ds.search(terms, 0);
+              displayProducts(hits);
             }
             else if ( cmd == "OR" ) {
                 string term;
@@ -100,14 +103,110 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
-
-
-
-
-            else {
-                cout << "Unknown command" << endl;
+			else if ( cmd == "ADD") {
+                            
+            //first we check if both user and hit number exist
+            std::vector<User*> userList;
+            userList = ds.getUsers();
+            bool userFound = false;
+            string user;
+            ss >> user;
+            for(size_t i = 0; i < userList.size(); ++i) {
+                if(userList[i]->getName() == user) {
+                    userFound = true;
+                    break;
+                }
             }
+
+            bool hitFound = false;
+            size_t hit;
+            ss >> hit;
+
+            if(hit <= hits.size() && hit > 0) {
+                hitFound = true;
+            }
+
+            // if either is invalid, whole operation is invalid
+            if(!hitFound || !userFound) {
+                cout << "Invalid request" << endl;
+            }
+            // if both valid, we may begin
+            else {
+                ds.addToUserCart(user, hits[hit-1]);
+            }
+                            
+		}
+		else if ( cmd == "VIEWCART") {
+			//we pass in the user whose cart we want to access
+            string username;
+            ss >> username;
+            map<string, vector<Product*>> carts = ds.getUserCart();
+						//if no cart matches the user, we return invalid username
+            if(carts.find(username) == carts.end()) {
+                cout << "Invalid username" << endl;
+            }
+						// or if the username's cart has been emptied due to purchases, we also do nothing
+						else if((carts.find(username))->second.size() == 0) {
+
+						}
+						//valid input
+            else {
+                vector<Product*> products = carts[username];
+									//we iterate through the products attributed to the user
+                    for(size_t i = 0; i < products.size(); ++i) {
+                        cout << to_string(i+1) << ":" << endl;
+                        cout << products[i]->displayString() << endl;
+                    }
+            }
+
+		}
+		else if ( cmd == "BUYCART") {
+			//we fetch users
+            vector<User*> userList = ds.getUsers();
+            string username;
+            User* user;
+            ss >> username;
+            bool valid = false;
+						//we check if user is valid by finding the name
+            for(size_t i = 0; i < userList.size(); ++i) {
+                if(userList[i]->getName() == username) {
+                    user = userList[i];
+                    valid = true;
+                    break;
+                }
+            }
+						//if no user found, we don't do anything
+            if(!valid) {
+                cout << "Invalid username" << endl;
+            }
+            else {
+                size_t index = 0;
+								//we access the particular user's cart
+                vector<Product*> cart = (ds.getUserCart().find(username))->second;
+								//we iterate through the user's products
+                for(size_t i = 0; i < cart.size(); ++i) {
+									//if user has money and still at least 1 in stock
+                    if((user->getBalance() >= cart[i]->getPrice()) && (cart[i]->getQty() > 0)) {
+                        user->deductAmount(cart[i]->getPrice());
+                        cart[i]->subtractQty(1);
+                        ds.removeFromCart(username, index);
+                    }
+										//if invalid item, we just keep iterating
+                    else {
+                        index++;
+                    }
+                } 
+            }
+						
+		}
+
+
+
+
+        else {
+            cout << "Unknown command" << endl;
         }
+    }
 
     }
     return 0;
