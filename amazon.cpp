@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
                 vector<Product*> products = carts[username];
 									//we iterate through the products attributed to the user
                     for(size_t i = 0; i < products.size(); ++i) {
-                        cout << to_string(i+1) << ":" << endl;
+                        cout << "Item " << to_string(i+1) << endl;
                         cout << products[i]->displayString() << endl;
                     }
             }

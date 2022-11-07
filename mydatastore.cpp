@@ -5,6 +5,15 @@
 
 MyDataStore::~MyDataStore() {
 
+		for(size_t i = 0; i < cart_.size(); i++) {
+			delete cart_[i];
+		}
+
+		for(size_t i = 0; i < users_.size(); i++) {
+			delete users_[i];
+		}
+
+
 }
 
 MyDataStore::MyDataStore() {}
@@ -91,7 +100,7 @@ void MyDataStore::dump(std::ostream& ofile) {
 		//output info of each user
 		users_.at(i)->dump(ofile);
 	}
-	ofile << "</users" << std::endl;
+	ofile << "</users>" << std::endl;
 
 }
 
@@ -138,7 +147,6 @@ void MyDataStore::addToUserCart(std::string username, Product* product) {
 			
 				size_t size = userCart_[username].size();
 				for(size_t i = 0; i < size; i++) {
-		
 						userCart_[username].pop_back();
 				} 
 
